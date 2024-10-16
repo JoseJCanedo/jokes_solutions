@@ -24,7 +24,6 @@ public class JokeController {
 
     @GetMapping("jokes/{type}")
     public JokeResponse[] getRandomJokeType(@PathVariable String type) {
-        JokeResponse[] jokes = jokeService.getRandomJokeType(type);
-        return jokes;
+        return jokeService.getRandomJokeType(type);
     }
 }
