@@ -1,0 +1,55 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.3'
+	id 'io.spring.dependency-management' version '1.1.6'
+	id "com.github.node-gradle.node" version "7.0.1"
+}
+
+group = 'com.classDemo'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+node {
+	download = true
+	nodeProjectDir = file("${project.projectDir}/src/main/react")
+}
+
+task installReactApp(type: NpmTask){
+	args = ['install']
+}
+
+task buildReactApp(type: NpxTask){
+	command = 'webpack'
+	args = ['build']
+}
+
+buildReactApp.dependsOn 'installReactApp'
+compileJava.dependsOn 'buildReactApp'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
