@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class JokeServiceImpl implements JokeService {
+    
     @Override
     public JokeResponse getRandomJoke() {
         RestTemplate restTemplate = new RestTemplate();
